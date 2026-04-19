@@ -1,25 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Phone, MessageSquare, ShieldCheck, Bike, Store, Check, Home } from 'lucide-react';
+import { Phone, MessageSquare, ShieldCheck, Bike, Store, Check, Home, Store as StoreIcon } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
-import { RESTAURANTS, DRIVER } from '../mock/mock';
+import { orderApi } from '../lib/api';
 
+const DRIVER = {
+  name: 'Karim B.', rating: 4.9, vehicle_fr: 'Scooter', vehicle_en: 'Scooter',
+  plate: 'AB-123-CD', photo: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=200&q=80',
+  insurance: 'MAIF Pro · Police n°FR-2025-8842173',
+};
 const STAGES = ['confirmed','preparing','ready','delivering','delivered'];
 
 const OrderTracking = () => {
   const { id } = useParams();
-  const { t, lang } = useApp();
-  const [stage, setStage] = useState(0);
+  const { t, lang, user } = useApp();
+  const [order, setOrder] = useState(null);
   const [driverPos, setDriverPos] = useState({ x: 20, y: 70 });
+  const [error, setError] = useState('');
 
-  let order = null;
-  try { order = JSON.parse(localStorage.getItem('cligoo_last_order')); } catch {}
-  const resto = RESTAURANTS.find(r => r.id === order?.restaurantId) || RESTAURANTS[0];
+  const stageIdx = useMemo(() => STAGES.indexOf(order?.status || 'confirmed'), [order]);
 
+  // Poll the order and auto-advance status (demo) via PATCH
   useEffect(() => {
-    const iv = setInterval(() => setStage(s => Math.min(s + 1, STAGES.length - 1)), 6000);
-    return () => clearInterval(iv);
-  }, []);
+    let t1, t2;
+    const poll = async () => {
+      try {
+        const o = await orderApi.get(id);
+        setOrder(o);
+        const idx = STAGES.indexOf(o.status);
+        if (idx >= 0 && idx < STAGES.length - 1) {
+          t2 = setTimeout(async () => {
+            try { await orderApi.setStatus(id, STAGES[idx + 1]); } catch {}
+          }, 7000);
+        }
+      } catch (e) {
+        setError(e?.response?.data?.detail || 'Order not found');
+      }
+    };
+    poll();
+    t1 = setInterval(poll, 5000);
+    return () => { clearInterval(t1); clearTimeout(t2); };
+  }, [id]);
 
   useEffect(() => {
     const iv = setInterval(() => {
@@ -31,46 +52,50 @@ const OrderTracking = () => {
     return () => clearInterval(iv);
   }, []);
 
-  const currentKey = STAGES[stage];
-  const eta = Math.max(3, 25 - stage * 6);
+  if (error) return (
+    <main className="max-w-3xl mx-auto px-4 py-20 text-center">
+      <p className="text-[#6B6259]">{error}</p>
+      {!user && <Link to="/login" className="inline-block mt-4 h-10 px-5 leading-10 rounded-full bg-[#FF6A35] text-white font-semibold text-sm">{t('nav.login')}</Link>}
+    </main>
+  );
+
+  if (!order) return <main className="max-w-3xl mx-auto px-4 py-20 text-center text-[#6B6259]">Chargement…</main>;
+
+  const currentKey = STAGES[stageIdx >= 0 ? stageIdx : 0];
+  const eta = Math.max(3, 25 - (stageIdx < 0 ? 0 : stageIdx) * 6);
 
   return (
     <main className="max-w-6xl mx-auto px-4 md:px-6 py-8">
       <div className="flex items-center gap-2 text-sm text-[#6B6259] mb-2">
         <span>{t('track.title')}</span>
         <span>·</span>
-        <span className="font-mono">#{id}</span>
+        <span className="font-mono">#{order.id}</span>
       </div>
       <h1 className="font-display text-3xl md:text-4xl font-extrabold text-[#1F1B16] mb-6">
         {t(`track.status.${currentKey}`)}
       </h1>
 
       <div className="grid lg:grid-cols-[1fr_400px] gap-6">
-        {/* Map mock */}
         <div className="relative rounded-2xl overflow-hidden map-bg h-[440px] border border-[#F1E6D6]">
-          {/* Roads */}
           <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             <path d="M 0 70 Q 30 65 50 55 T 100 20" stroke="#FFFFFF" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.9" />
             <path d="M 10 20 Q 40 30 55 50 T 100 80" stroke="#FFFFFF" strokeWidth="0.8" fill="none" strokeLinecap="round" opacity="0.7" />
             <path d="M 0 40 Q 30 45 60 40 T 100 50" stroke="#FFFFFF" strokeWidth="0.6" fill="none" strokeLinecap="round" opacity="0.5" />
           </svg>
 
-          {/* Restaurant marker */}
           <div className="absolute" style={{ left: '20%', top: '70%', transform: 'translate(-50%,-50%)' }}>
             <div className="w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center">
-              <Store className="w-5 h-5 text-[#FF6A35]" />
+              <StoreIcon className="w-5 h-5 text-[#FF6A35]" />
             </div>
-            <p className="text-[11px] font-semibold mt-1 bg-white/90 px-2 py-0.5 rounded shadow inline-block">{resto.name}</p>
+            <p className="text-[11px] font-semibold mt-1 bg-white/90 px-2 py-0.5 rounded shadow inline-block">{order.restaurant_name}</p>
           </div>
 
-          {/* Driver marker (animated) */}
           <div className="absolute transition-all duration-1000" style={{ left: `${driverPos.x}%`, top: `${driverPos.y}%`, transform: 'translate(-50%,-50%)' }}>
             <div className="w-12 h-12 rounded-full bg-[#FF6A35] shadow-lg flex items-center justify-center ping-soft">
               <Bike className="w-6 h-6 text-white" />
             </div>
           </div>
 
-          {/* Home marker */}
           <div className="absolute" style={{ left: '85%', top: '20%', transform: 'translate(-50%,-50%)' }}>
             <div className="w-10 h-10 rounded-full bg-[#1F1B16] shadow-lg flex items-center justify-center">
               <Home className="w-5 h-5 text-white" />
@@ -87,27 +112,25 @@ const OrderTracking = () => {
         </div>
 
         <aside className="space-y-4">
-          {/* Timeline */}
           <div className="bg-white rounded-2xl border border-[#F1E6D6] p-5">
             {STAGES.map((k, i) => (
               <div key={k} className="flex gap-3 items-start">
                 <div className="flex flex-col items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${i <= stage ? 'bg-[#FF6A35] text-white' : 'bg-[#F1E6D6] text-[#B8AD9C]'}`}>
-                    {i < stage ? <Check className="w-4 h-4" /> : <span className="text-xs font-bold">{i+1}</span>}
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${i <= stageIdx ? 'bg-[#FF6A35] text-white' : 'bg-[#F1E6D6] text-[#B8AD9C]'}`}>
+                    {i < stageIdx ? <Check className="w-4 h-4" /> : <span className="text-xs font-bold">{i+1}</span>}
                   </div>
-                  {i < STAGES.length - 1 && <div className={`w-0.5 flex-1 min-h-8 ${i < stage ? 'bg-[#FF6A35]' : 'bg-[#F1E6D6]'}`} />}
+                  {i < STAGES.length - 1 && <div className={`w-0.5 flex-1 min-h-8 ${i < stageIdx ? 'bg-[#FF6A35]' : 'bg-[#F1E6D6]'}`} />}
                 </div>
                 <div className="pb-5">
-                  <p className={`text-sm font-semibold ${i === stage ? 'text-[#FF6A35]' : 'text-[#1F1B16]'}`}>
+                  <p className={`text-sm font-semibold ${i === stageIdx ? 'text-[#FF6A35]' : 'text-[#1F1B16]'}`}>
                     {t(`track.status.${k}`)}
                   </p>
-                  {i === stage && <p className="text-xs text-[#6B6259] mt-0.5">{lang==='fr' ? 'En cours...' : 'In progress...'}</p>}
+                  {i === stageIdx && <p className="text-xs text-[#6B6259] mt-0.5">{lang==='fr' ? 'En cours...' : 'In progress...'}</p>}
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Driver card */}
           <div className="bg-white rounded-2xl border border-[#F1E6D6] p-5">
             <p className="text-xs text-[#6B6259] mb-3">{t('track.driver')}</p>
             <div className="flex items-center gap-3">
@@ -131,17 +154,28 @@ const OrderTracking = () => {
             </div>
           </div>
 
-          {/* Summary mini */}
-          {order && (
-            <div className="bg-white rounded-2xl border border-[#F1E6D6] p-5">
-              <p className="text-xs text-[#6B6259]">{t('checkout.summary')}</p>
-              <p className="font-display text-lg font-bold text-[#1F1B16] mt-1">{order.total.toFixed(2)} €</p>
-              <p className="text-xs text-[#6B6259]">{order.items.length} {t('cart.items')} · {order.payment.toUpperCase()}</p>
-              <Link to="/account" className="mt-4 block text-center h-10 rounded-full bg-[#1F1B16] text-white text-sm font-semibold leading-10">
-                {t('account.orders')}
-              </Link>
+          <div className="bg-white rounded-2xl border border-[#F1E6D6] p-5">
+            <p className="text-xs text-[#6B6259]">{t('checkout.summary')}</p>
+            <p className="font-display text-lg font-bold text-[#1F1B16] mt-1">{order.total.toFixed(2)} €</p>
+            <p className="text-xs text-[#6B6259]">{order.items.length} {t('cart.items')} · {order.payment_method.toUpperCase()}</p>
+            <div className="mt-3 grid grid-cols-3 gap-2 text-[11px] bg-[#FFF4E8] rounded-lg p-2">
+              <div>
+                <div className="text-[#6B6259]">{t('checkout.split.restaurant')}</div>
+                <div className="font-bold">{order.stripe_split.restaurant_payout.toFixed(2)} €</div>
+              </div>
+              <div>
+                <div className="text-[#6B6259]">{t('checkout.split.driver')}</div>
+                <div className="font-bold">{order.stripe_split.driver_payout.toFixed(2)} €</div>
+              </div>
+              <div>
+                <div className="text-[#6B6259]">{t('checkout.split.platform')}</div>
+                <div className="font-bold">{order.stripe_split.platform_fee.toFixed(2)} €</div>
+              </div>
             </div>
-          )}
+            <Link to="/account" className="mt-4 block text-center h-10 rounded-full bg-[#1F1B16] text-white text-sm font-semibold leading-10">
+              {t('account.orders')}
+            </Link>
+          </div>
         </aside>
       </div>
     </main>

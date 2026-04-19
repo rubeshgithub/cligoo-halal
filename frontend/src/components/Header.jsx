@@ -7,7 +7,7 @@ import { Button } from './ui/button';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from './ui/dropdown-menu';
 
 const Header = () => {
-  const { t, lang, setLang, address, setAddress, cartCount, setCartOpen, user, setUser } = useApp();
+  const { t, lang, setLang, address, setAddress, cartCount, setCartOpen, user, logout } = useApp();
   const loc = useLocation();
   const nav = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -64,9 +64,13 @@ const Header = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-2 px-3 h-10 rounded-full text-sm font-medium text-[#2A241E] hover:bg-[#FFF4E8]">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#FF6A35] to-[#FFB347] text-white flex items-center justify-center text-xs font-bold">
-                    {user.name?.[0]?.toUpperCase() || 'U'}
-                  </div>
+                  {user.picture ? (
+                    <img src={user.picture} alt="" className="w-7 h-7 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#FF6A35] to-[#FFB347] text-white flex items-center justify-center text-xs font-bold">
+                      {user.name?.[0]?.toUpperCase() || 'U'}
+                    </div>
+                  )}
                   <span className="hidden md:inline">{user.name}</span>
                 </button>
               </DropdownMenuTrigger>
@@ -76,19 +80,19 @@ const Header = () => {
                 <DropdownMenuItem onClick={()=>nav('/restaurant-dashboard')}>{t('dash.restaurant')}</DropdownMenuItem>
                 <DropdownMenuItem onClick={()=>nav('/driver-dashboard')}>{t('dash.driver')}</DropdownMenuItem>
                 <DropdownMenuItem onClick={()=>nav('/admin')}>{t('dash.admin')}</DropdownMenuItem>
-                <DropdownMenuItem onClick={()=>{ setUser(null); nav('/'); }}>{t('nav.logout')}</DropdownMenuItem>
+                <DropdownMenuItem onClick={async ()=>{ await logout(); nav('/'); }}>{t('nav.logout')}</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <>
               <button
-                onClick={()=>{ setUser({ name: 'Sofia', email: 'sofia@example.com' }); }}
+                onClick={()=>nav('/login')}
                 className="hidden sm:inline-flex h-10 px-4 rounded-full text-sm font-semibold text-[#2A241E] hover:bg-[#FFF4E8]"
               >
                 {t('nav.login')}
               </button>
               <button
-                onClick={()=>{ setUser({ name: 'Sofia', email: 'sofia@example.com' }); }}
+                onClick={()=>nav('/login')}
                 className="h-10 px-4 rounded-full text-sm font-semibold text-white bg-[#1F1B16] hover:bg-[#2F2A24]"
               >
                 {t('nav.signup')}

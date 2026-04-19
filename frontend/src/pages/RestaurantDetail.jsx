@@ -1,17 +1,29 @@
-import React, { useMemo, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import React, { useMemo, useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Star, Clock, Bike, ShieldCheck, MapPin, Info, Plus, Search } from 'lucide-react';
-import { RESTAURANTS, MENUS } from '../mock/mock';
 import { useApp } from '../contexts/AppContext';
+import { restaurantApi } from '../lib/api';
 
 const RestaurantDetail = () => {
   const { id } = useParams();
   const nav = useNavigate();
   const { t, lang, addToCart, cart, cartSubtotal, setCartOpen } = useApp();
-  const r = RESTAURANTS.find(x => x.id === id);
-  const menu = MENUS[id];
+  const [r, setR] = useState(null);
+  const [menu, setMenu] = useState(null);
   const [search, setSearch] = useState('');
-  const [activeSection, setActiveSection] = useState(menu?.sections?.[0]?.id);
+  const [activeSection, setActiveSection] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([restaurantApi.get(id), restaurantApi.menu(id)])
+      .then(([rest, m]) => {
+        setR(rest); setMenu(m);
+        setActiveSection(m?.sections?.[0]?.id);
+      })
+      .catch(()=>{ setR(null); })
+      .finally(()=>setLoading(false));
+  }, [id]);
 
   const sections = useMemo(() => {
     if (!menu) return [];
@@ -22,13 +34,13 @@ const RestaurantDetail = () => {
     })).filter(s => s.items.length);
   }, [menu, search]);
 
+  if (loading) return <div className="max-w-6xl mx-auto px-4 py-20 text-center text-[#6B6259]">Chargement...</div>;
   if (!r) return <div className="p-10 text-center">Restaurant not found</div>;
 
   const cartCount = cart.items.reduce((s,i)=>s+i.qty, 0);
 
   return (
     <main>
-      {/* Cover */}
       <section className="relative h-60 md:h-80">
         <img src={r.cover} alt={r.name} className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1F1B16]/70 via-[#1F1B16]/20 to-transparent" />
@@ -62,11 +74,10 @@ const RestaurantDetail = () => {
         </div>
       </div>
 
-      {/* Menu layout */}
       <div className="max-w-6xl mx-auto px-4 md:px-6 mt-8 grid md:grid-cols-[220px_1fr] gap-8 pb-24">
         <aside className="hidden md:block">
           <div className="sticky top-20 space-y-1">
-            {menu.sections.map(s => (
+            {menu?.sections?.map(s => (
               <a key={s.id} href={`#${s.id}`} onClick={()=>setActiveSection(s.id)}
                  className={`block px-3 py-2 rounded-lg text-sm font-medium ${activeSection===s.id ? 'bg-[#FFF4E8] text-[#FF6A35]' : 'text-[#1F1B16] hover:bg-[#FFF4E8]'}`}>
                 {lang==='fr' ? s.name_fr : s.name_en}
@@ -108,7 +119,6 @@ const RestaurantDetail = () => {
         </section>
       </div>
 
-      {/* Sticky cart summary */}
       {cartCount > 0 && (
         <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:w-[360px] z-40">
           <button onClick={()=>setCartOpen(true)}

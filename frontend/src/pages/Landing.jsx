@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MapPin, Search, Clock, ShieldCheck, CreditCard, Smartphone, Store, Bike, ArrowRight, ChevronLeft, ChevronRight, Award } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
-import { CATEGORIES, RESTAURANTS } from '../mock/mock';
+import { restaurantApi } from '../lib/api';
 import RestaurantCard from '../components/RestaurantCard';
 
 const Landing = () => {
@@ -11,6 +11,18 @@ const Landing = () => {
   const [addr, setAddr] = useState(address);
   const [timeMode, setTimeMode] = useState('now');
   const catRef = useRef(null);
+  const [cats, setCats] = useState([]);
+  const [popular, setPopular] = useState([]);
+  const [newOnes, setNewOnes] = useState([]);
+
+  useEffect(() => {
+    restaurantApi.categories().then(setCats).catch(()=>{});
+    restaurantApi.list({ sort: 'rating' }).then(list => {
+      setPopular(list.slice(0, 8));
+      const sorted = [...list].sort((a,b) => (b.new?1:0) - (a.new?1:0));
+      setNewOnes(sorted.slice(0, 8));
+    }).catch(()=>{});
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -22,12 +34,8 @@ const Landing = () => {
     if (catRef.current) catRef.current.scrollBy({ left: dir * 340, behavior: 'smooth' });
   };
 
-  const popular = [...RESTAURANTS].sort((a,b)=>b.rating-a.rating).slice(0,8);
-  const newOnes = RESTAURANTS.filter(r=>r.new).concat(RESTAURANTS.filter(r=>!r.new)).slice(0,8);
-
   return (
     <main>
-      {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10" style={{
           background: 'linear-gradient(135deg, #FFF4E8 0%, #FFE6D0 50%, #FFD7B8 100%)'
@@ -116,7 +124,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* CATEGORIES */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 mt-6 md:mt-8">
         <div className="flex items-end justify-between mb-5">
           <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1F1B16]">{t('categories.title')}</h2>
@@ -126,7 +133,7 @@ const Landing = () => {
           </div>
         </div>
         <div ref={catRef} className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
-          {CATEGORIES.map(c => (
+          {cats.map(c => (
             <Link key={c.id} to={`/restaurants?cat=${c.id}`} className="shrink-0 w-[150px] group">
               <div className="aspect-square rounded-2xl overflow-hidden bg-[#FFF4E8] lift">
                 <img src={c.image} alt={c.id} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
@@ -137,7 +144,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* POPULAR */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 mt-14">
         <div className="flex items-end justify-between mb-5">
           <div>
@@ -153,7 +159,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* HALAL PROMISE */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 mt-20">
         <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1F1B16] text-center mb-10">{t('halal.title')}</h2>
         <div className="grid md:grid-cols-3 gap-5">
@@ -173,7 +178,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* NEW ON CLIGOO */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 mt-20">
         <div className="flex items-end justify-between mb-5">
           <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1F1B16]">{t('new.title')}</h2>
@@ -186,7 +190,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 mt-24">
         <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1F1B16] text-center mb-10">{t('how.title')}</h2>
         <div className="grid md:grid-cols-3 gap-5">
@@ -204,7 +207,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* 3 APPS */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 mt-24">
         <h2 className="font-display text-2xl md:text-3xl font-bold text-[#1F1B16] text-center mb-10">{t('apps.title')}</h2>
         <div className="grid md:grid-cols-3 gap-5">
@@ -227,7 +229,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* DUAL CTA */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 mt-24 mb-4 grid md:grid-cols-2 gap-5">
         <div className="rounded-3xl p-8 md:p-10 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #FF6A35, #FF8A5B)' }}>
           <Store className="absolute -right-4 -bottom-4 w-44 h-44 text-white/10" />

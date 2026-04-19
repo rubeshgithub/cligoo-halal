@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { SlidersHorizontal, MapPin, Search, X } from 'lucide-react';
 import RestaurantCard from '../components/RestaurantCard';
 import { useApp } from '../contexts/AppContext';
-import { RESTAURANTS, CATEGORIES } from '../mock/mock';
+import { restaurantApi } from '../lib/api';
 
 const Restaurants = () => {
   const { t, lang, address } = useApp();
@@ -14,28 +14,39 @@ const Restaurants = () => {
   const [priceLevels, setPriceLevels] = useState([]);
   const [minRating, setMinRating] = useState(0);
   const [search, setSearch] = useState('');
+  const [cats, setCats] = useState([]);
+  const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(()=>{ restaurantApi.categories().then(setCats).catch(()=>{}); }, []);
 
   useEffect(()=>{
     const c = params.get('cat');
     if (c) setCat(c);
   }, [params]);
 
+  useEffect(() => {
+    setLoading(true);
+    const params = {};
+    if (cat && cat !== 'all') params.cat = cat;
+    if (sort) params.sort = sort;
+    if (maxDelivery < 60) params.max_delivery = maxDelivery;
+    if (minRating > 0) params.min_rating = minRating;
+    restaurantApi.list(params)
+      .then(setList)
+      .catch(()=>setList([]))
+      .finally(()=>setLoading(false));
+  }, [cat, sort, maxDelivery, minRating]);
+
   const togglePrice = (p) => setPriceLevels(prev => prev.includes(p) ? prev.filter(x=>x!==p) : [...prev, p]);
 
   const filtered = useMemo(() => {
-    let list = RESTAURANTS.filter(r => {
-      if (cat !== 'all' && !r.cuisine.includes(cat)) return false;
-      if (r.delivery_max > maxDelivery) return false;
+    return list.filter(r => {
       if (priceLevels.length && !priceLevels.includes(r.price_level)) return false;
-      if (r.rating < minRating) return false;
       if (search && !r.name.toLowerCase().includes(search.toLowerCase())) return false;
       return true;
     });
-    if (sort === 'rating') list.sort((a,b)=>b.rating-a.rating);
-    else if (sort === 'delivery') list.sort((a,b)=>a.delivery_min-b.delivery_min);
-    else if (sort === 'priceAsc') list.sort((a,b)=>a.price_level-b.price_level);
-    return list;
-  }, [cat, sort, maxDelivery, priceLevels, minRating, search]);
+  }, [list, priceLevels, search]);
 
   const clearAll = () => {
     setCat('all'); setSort('recommended'); setMaxDelivery(60);
@@ -45,7 +56,6 @@ const Restaurants = () => {
 
   return (
     <main className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-      {/* Top bar */}
       <div className="mb-6">
         <div className="flex flex-wrap items-center gap-2 text-sm text-[#6B6259]">
           <MapPin className="w-4 h-4 text-[#FF6A35]" />
@@ -57,13 +67,12 @@ const Restaurants = () => {
         <p className="text-[#6B6259] mt-1">{filtered.length} {t('restos.results')}</p>
       </div>
 
-      {/* Category chips */}
       <div className="flex gap-2 overflow-x-auto no-scrollbar pb-3 mb-4">
         <button onClick={()=>setCat('all')}
           className={`shrink-0 px-4 h-10 rounded-full text-sm font-semibold border ${cat==='all' ? 'bg-[#1F1B16] text-white border-[#1F1B16]' : 'bg-white text-[#1F1B16] border-[#F1E6D6] hover:border-[#FF6A35]'}`}>
           {lang==='fr' ? 'Tout' : 'All'}
         </button>
-        {CATEGORIES.map(c => (
+        {cats.map(c => (
           <button key={c.id} onClick={()=>setCat(c.id)}
             className={`shrink-0 inline-flex items-center gap-2 pl-1 pr-4 h-10 rounded-full text-sm font-semibold border ${cat===c.id ? 'bg-[#1F1B16] text-white border-[#1F1B16]' : 'bg-white text-[#1F1B16] border-[#F1E6D6] hover:border-[#FF6A35]'}`}>
             <img src={c.image} alt="" className="w-8 h-8 rounded-full object-cover" />
@@ -73,7 +82,6 @@ const Restaurants = () => {
       </div>
 
       <div className="grid lg:grid-cols-[260px_1fr] gap-6">
-        {/* Sidebar filters */}
         <aside className="bg-white rounded-2xl border border-[#F1E6D6] p-5 h-fit sticky top-20">
           <div className="flex items-center justify-between mb-4">
             <div className="inline-flex items-center gap-2 font-display font-bold text-[#1F1B16]">
@@ -129,7 +137,6 @@ const Restaurants = () => {
           </div>
         </aside>
 
-        {/* List */}
         <section>
           <div className="bg-white rounded-full border border-[#F1E6D6] focus-within:border-[#FF6A35] h-12 px-4 flex items-center gap-2 mb-5">
             <Search className="w-4 h-4 text-[#6B6259]" />
@@ -141,7 +148,13 @@ const Restaurants = () => {
             )}
           </div>
 
-          {filtered.length === 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              {[1,2,3,4,5,6].map(i => (
+                <div key={i} className="aspect-[16/10] bg-white rounded-2xl animate-pulse" />
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
             <div className="bg-white rounded-2xl p-10 text-center border border-[#F1E6D6]">
               <p className="text-[#6B6259]">{lang==='fr' ? 'Aucun restaurant ne correspond à vos filtres.' : 'No restaurant matches your filters.'}</p>
             </div>

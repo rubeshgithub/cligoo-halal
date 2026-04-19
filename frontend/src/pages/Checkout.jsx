@@ -1,58 +1,83 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreditCard, Smartphone, Wallet, MapPin, MessageSquare, ShieldCheck, Bike, Store, Building2 } from 'lucide-react';
+import { CreditCard, Smartphone, Wallet, MapPin, MessageSquare, ShieldCheck, Bike, Store, Building2, LogIn } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
-import { RESTAURANTS, PRICING } from '../mock/mock';
+import { restaurantApi, orderApi } from '../lib/api';
 
 const Checkout = () => {
-  const { t, lang, cart, cartSubtotal, clearCart, address, user } = useApp();
+  const { t, lang, cart, cartSubtotal, clearCart, address, user, authLoading } = useApp();
   const nav = useNavigate();
-  const resto = RESTAURANTS.find(r => r.id === cart.restaurantId);
+  const [resto, setResto] = useState(null);
   const [payment, setPayment] = useState('card');
   const [tip, setTip] = useState(2);
   const [instructions, setInstructions] = useState('');
   const [placing, setPlacing] = useState(false);
+  const [err, setErr] = useState('');
 
-  if (!resto || cart.items.length === 0) {
-    return (
-      <main className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <p className="text-[#6B6259]">{t('cart.empty')}</p>
-      </main>
-    );
+  useEffect(() => {
+    if (cart.restaurantId) {
+      restaurantApi.get(cart.restaurantId).then(setResto).catch(()=>setResto(null));
+    }
+  }, [cart.restaurantId]);
+
+  if (!cart.items.length) {
+    return <main className="max-w-3xl mx-auto px-4 py-20 text-center">
+      <p className="text-[#6B6259]">{t('cart.empty')}</p>
+    </main>;
+  }
+
+  if (!resto) {
+    return <main className="max-w-3xl mx-auto px-4 py-20 text-center">
+      <p className="text-[#6B6259]">Chargement...</p>
+    </main>;
   }
 
   const deliveryFee = resto.delivery_fee;
-  const serviceFee = +(cartSubtotal * PRICING.service_fee_rate).toFixed(2);
+  const serviceFee = +(cartSubtotal * 0.10).toFixed(2);
   const total = +(cartSubtotal + deliveryFee + serviceFee + tip).toFixed(2);
-
-  // Stripe Connect split (mock)
-  const platformFee = +((cartSubtotal * PRICING.platform_commission) + (serviceFee)).toFixed(2);
-  const restaurantPayout = +(cartSubtotal - (cartSubtotal * PRICING.platform_commission)).toFixed(2);
+  const platformFee = +(cartSubtotal * 0.30 + serviceFee).toFixed(2);
+  const restaurantPayout = +(cartSubtotal - cartSubtotal * 0.30).toFixed(2);
   const driverPayout = +(deliveryFee + tip).toFixed(2);
 
   const place = async () => {
-    setPlacing(true);
-    setTimeout(() => {
-      const orderId = 'CL-' + Math.floor(100000 + Math.random() * 900000);
+    if (!user) { nav('/login'); return; }
+    setPlacing(true); setErr('');
+    try {
       const payload = {
-        id: orderId, restaurantId: resto.id, items: cart.items, total,
-        subtotal: cartSubtotal, deliveryFee, serviceFee, tip, payment,
+        restaurant_id: resto.id,
+        items: cart.items.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty, image: i.image })),
         address: address || '10 Rue de Rivoli, 75001 Paris',
-        placedAt: Date.now(),
+        instructions,
+        payment_method: payment,
+        tip,
       };
-      localStorage.setItem('cligoo_last_order', JSON.stringify(payload));
+      const order = await orderApi.create(payload);
+      localStorage.setItem('cligoo_last_order', JSON.stringify(order));
       clearCart();
-      nav(`/order/${orderId}`);
-    }, 1200);
+      nav(`/order/${order.id}`);
+    } catch (e) {
+      setErr(e?.response?.data?.detail || (lang==='fr' ? 'Erreur lors de la commande' : 'Order failed'));
+    } finally { setPlacing(false); }
   };
 
   return (
     <main className="max-w-6xl mx-auto px-4 md:px-6 py-8">
       <h1 className="font-display text-3xl font-extrabold text-[#1F1B16] mb-6">{t('checkout.title')}</h1>
 
+      {!authLoading && !user && (
+        <div className="mb-6 bg-[#FFF4E8] border border-[#FFD7B8] rounded-2xl p-4 flex items-center gap-3">
+          <LogIn className="w-5 h-5 text-[#FF6A35] shrink-0" />
+          <p className="text-sm flex-1">
+            {lang==='fr' ? 'Connectez-vous pour finaliser votre commande.' : 'Log in to place your order.'}
+          </p>
+          <button onClick={()=>nav('/login')} className="h-9 px-4 rounded-full bg-[#FF6A35] text-white text-sm font-semibold">
+            {t('nav.login')}
+          </button>
+        </div>
+      )}
+
       <div className="grid lg:grid-cols-[1fr_380px] gap-6">
         <div className="space-y-5">
-          {/* Address */}
           <div className="bg-white rounded-2xl border border-[#F1E6D6] p-5">
             <h3 className="font-display font-bold flex items-center gap-2 mb-3"><MapPin className="w-4 h-4 text-[#FF6A35]" /> {t('checkout.address')}</h3>
             <div className="flex items-start gap-3 p-3 rounded-xl bg-[#FFF4E8]">
@@ -65,7 +90,6 @@ const Checkout = () => {
             </div>
           </div>
 
-          {/* Instructions */}
           <div className="bg-white rounded-2xl border border-[#F1E6D6] p-5">
             <h3 className="font-display font-bold flex items-center gap-2 mb-3"><MessageSquare className="w-4 h-4 text-[#FF6A35]" /> {t('checkout.instructions')}</h3>
             <textarea value={instructions} onChange={e=>setInstructions(e.target.value)}
@@ -74,7 +98,6 @@ const Checkout = () => {
               className="w-full rounded-xl border border-[#F1E6D6] focus:border-[#FF6A35] outline-none p-3 text-sm" />
           </div>
 
-          {/* Payment */}
           <div className="bg-white rounded-2xl border border-[#F1E6D6] p-5">
             <h3 className="font-display font-bold flex items-center gap-2 mb-3"><CreditCard className="w-4 h-4 text-[#FF6A35]" /> {t('checkout.payment')}</h3>
             <div className="grid sm:grid-cols-3 gap-3">
@@ -93,11 +116,10 @@ const Checkout = () => {
             </div>
             <p className="text-[11px] text-[#6B6259] mt-3 flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-[#2E7D32]" />
-              {lang==='fr' ? 'Paiement mocké pour cette démo. Intégration Stripe Connect réelle dans la phase suivante.' : 'Payment mocked for this demo. Real Stripe Connect integration in the next phase.'}
+              {lang==='fr' ? 'Mode TEST Stripe Connect — aucun débit réel. Intégration en production dès réception de vos clés API.' : 'Stripe Connect TEST mode — no real charge. Production integration once your API keys are provided.'}
             </p>
           </div>
 
-          {/* Tip */}
           <div className="bg-white rounded-2xl border border-[#F1E6D6] p-5">
             <h3 className="font-display font-bold flex items-center gap-2 mb-3"><Bike className="w-4 h-4 text-[#FF6A35]" /> {t('checkout.tip')}</h3>
             <div className="flex flex-wrap gap-2">
@@ -110,29 +132,30 @@ const Checkout = () => {
             </div>
           </div>
 
-          {/* Stripe Connect split preview */}
           <div className="bg-gradient-to-br from-[#1F1B16] to-[#2F2A24] text-white rounded-2xl p-5">
             <h3 className="font-display font-bold flex items-center gap-2 mb-4">
-              <ShieldCheck className="w-4 h-4" /> {t('checkout.split.title')}
+              <ShieldCheck className="w-4 h-4" /> {t('checkout.split.title')} <span className="ml-2 px-2 py-0.5 rounded-full bg-[#FFB347] text-[#1F1B16] text-[10px] font-bold">TEST MODE</span>
             </h3>
             <div className="grid sm:grid-cols-3 gap-3 text-sm">
               <div className="bg-white/5 rounded-xl p-3">
                 <div className="flex items-center gap-2 text-white/70"><Store className="w-4 h-4" /> {t('checkout.split.restaurant')}</div>
                 <p className="font-display text-xl font-bold mt-1">{restaurantPayout.toFixed(2)} €</p>
+                <p className="text-[10px] text-white/50 mt-1">acct_test_{resto.id}</p>
               </div>
               <div className="bg-white/5 rounded-xl p-3">
                 <div className="flex items-center gap-2 text-white/70"><Bike className="w-4 h-4" /> {t('checkout.split.driver')}</div>
                 <p className="font-display text-xl font-bold mt-1">{driverPayout.toFixed(2)} €</p>
+                <p className="text-[10px] text-white/50 mt-1">acct_test_driver_001</p>
               </div>
               <div className="bg-[#FF6A35]/20 border border-[#FF6A35]/40 rounded-xl p-3">
                 <div className="flex items-center gap-2 text-[#FFB347]"><Building2 className="w-4 h-4" /> {t('checkout.split.platform')}</div>
                 <p className="font-display text-xl font-bold mt-1">{platformFee.toFixed(2)} €</p>
+                <p className="text-[10px] text-white/50 mt-1">CLIGOO</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Summary */}
         <aside>
           <div className="bg-white rounded-2xl border border-[#F1E6D6] p-5 sticky top-20">
             <h3 className="font-display font-bold mb-4">{t('checkout.summary')}</h3>
@@ -158,6 +181,7 @@ const Checkout = () => {
               {tip > 0 && <div className="flex justify-between text-[#6B6259]"><span>{t('checkout.tip')}</span><span>{tip.toFixed(2)} €</span></div>}
               <div className="flex justify-between text-base font-bold text-[#1F1B16] pt-2 border-t border-[#F1E6D6]"><span>{t('cart.total')}</span><span>{total.toFixed(2)} €</span></div>
             </div>
+            {err && <p className="text-xs text-red-500 mt-2">{err}</p>}
             <button onClick={place} disabled={placing}
               className="w-full h-12 rounded-full bg-[#FF6A35] hover:bg-[#E85A28] disabled:opacity-60 text-white font-semibold mt-5">
               {placing ? (lang==='fr' ? 'Paiement en cours...' : 'Processing...') : `${t('checkout.place')} · ${total.toFixed(2)} €`}
