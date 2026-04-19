@@ -1,0 +1,14 @@
+.App {
+  min-height: 100vh;
+  background: #FFF8F1;
+}
+
+/* Button subtle press feedback */
+button { transition: transform 120ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease; }
+button:active { transform: scale(0.98); }
+
+/* Links */
+a { text-decoration: none; }
+
+/* Selection */
+::selection { background: #FFB347; color: #1F1B16; }
