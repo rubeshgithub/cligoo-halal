@@ -38,8 +38,8 @@ const AuthCallback = () => {
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
       <Logo size={40} />
-      <div className="w-10 h-10 rounded-full border-4 border-[#FFE0C2] border-t-[#FF6A35] animate-spin" />
-      <p className="text-sm text-[#6B6259]">{lang === 'fr' ? 'Connexion en cours…' : 'Signing you in…'}</p>
+      <div className="w-10 h-10 rounded-full border-4 border-[#FDE4CC] border-t-[#3E8F8B] animate-spin" />
+      <p className="text-sm text-[#5A6F72]">{lang === 'fr' ? 'Connexion en cours…' : 'Signing you in…'}</p>
     </div>
   );
 };

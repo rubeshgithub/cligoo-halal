@@ -93,12 +93,12 @@ const VideoCallModal = ({ open, onOpenChange, orderId }) => {
     <Dialog open={open} onOpenChange={(v)=>{ if (!v) cleanup(); onOpenChange(v); }}>
       <DialogContent className="max-w-3xl p-0 overflow-hidden bg-[#0F0E0D]">
         <DialogTitle className="sr-only">Video call</DialogTitle>
-        <div className="flex items-center justify-between px-4 h-12 bg-[#1F1B16] text-white">
+        <div className="flex items-center justify-between px-4 h-12 bg-[#1F3B40] text-white">
           <div className="flex items-center gap-2 text-sm font-semibold">
-            <Video className="w-4 h-4 text-[#FF6A35]" />
+            <Video className="w-4 h-4 text-[#3E8F8B]" />
             {lang==='fr' ? 'Appel vidéo avec le livreur' : 'Video call with courier'}
             {info?.dev_mode && (
-              <span className="ml-2 px-2 py-0.5 rounded-full bg-[#FFB347] text-[#1F1B16] text-[10px] font-bold">DEMO</span>
+              <span className="ml-2 px-2 py-0.5 rounded-full bg-[#F5C7A1] text-[#1F3B40] text-[10px] font-bold">DEMO</span>
             )}
           </div>
           <button onClick={endAndClose} className="h-8 px-3 rounded-full bg-[#E5484D] hover:bg-[#D13B40] text-white text-xs font-semibold inline-flex items-center gap-1">
@@ -109,7 +109,7 @@ const VideoCallModal = ({ open, onOpenChange, orderId }) => {
         <div className="relative aspect-video bg-[#0F0E0D]">
           {phase === 'creating' || phase === 'joining' ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white">
-              <Loader2 className="w-10 h-10 animate-spin text-[#FF6A35]" />
+              <Loader2 className="w-10 h-10 animate-spin text-[#3E8F8B]" />
               <p className="text-sm">
                 {phase === 'creating' ? (lang==='fr' ? 'Création de la salle sécurisée…' : 'Creating secure room…') : (lang==='fr' ? 'Connexion…' : 'Connecting…')}
               </p>
@@ -119,7 +119,7 @@ const VideoCallModal = ({ open, onOpenChange, orderId }) => {
           {phase === 'error' && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white px-6 text-center">
               <p className="text-sm text-red-300">{error}</p>
-              <button onClick={start} className="h-9 px-4 rounded-full bg-[#FF6A35] text-white text-sm font-semibold">
+              <button onClick={start} className="h-9 px-4 rounded-full bg-[#3E8F8B] text-white text-sm font-semibold">
                 {lang==='fr' ? 'Réessayer' : 'Retry'}
               </button>
             </div>
@@ -130,8 +130,8 @@ const VideoCallModal = ({ open, onOpenChange, orderId }) => {
 
           {phase === 'in_call' && info?.dev_mode && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white px-8 text-center">
-              <div className="w-20 h-20 rounded-full bg-[#FF6A35]/20 border-2 border-[#FF6A35] flex items-center justify-center">
-                <Video className="w-10 h-10 text-[#FF6A35]" />
+              <div className="w-20 h-20 rounded-full bg-[#3E8F8B]/20 border-2 border-[#3E8F8B] flex items-center justify-center">
+                <Video className="w-10 h-10 text-[#3E8F8B]" />
               </div>
               <div>
                 <h3 className="font-display text-xl font-bold">
@@ -144,14 +144,14 @@ const VideoCallModal = ({ open, onOpenChange, orderId }) => {
                 </p>
               </div>
               <div className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-left text-xs font-mono text-white/80">
-                <div>room: <span className="text-[#FFB347]">{info.room_name}</span></div>
-                <div>url:  <span className="text-[#FFB347] break-all">{info.room_url}</span></div>
+                <div>room: <span className="text-[#F5C7A1]">{info.room_name}</span></div>
+                <div>url:  <span className="text-[#F5C7A1] break-all">{info.room_url}</span></div>
               </div>
             </div>
           )}
         </div>
 
-        <div className="flex items-start gap-2 text-[11px] text-white/70 bg-[#1F1B16] px-4 py-3 border-t border-white/10">
+        <div className="flex items-start gap-2 text-[11px] text-white/70 bg-[#1F3B40] px-4 py-3 border-t border-white/10">
           <ShieldCheck className="w-3.5 h-3.5 text-[#7BC47F] mt-0.5 shrink-0" />
           <span>
             {lang==='fr'

@@ -11,4 +11,4 @@ button:active { transform: scale(0.98); }
 a { text-decoration: none; }
 
 /* Selection */
-::selection { background: #FFB347; color: #1F1B16; }
+::selection { background: #F5C7A1; color: #1F3B40; }
