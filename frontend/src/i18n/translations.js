@@ -114,6 +114,7 @@ export const translations = {
     'track.driver': 'Votre livreur',
     'track.call': 'Appeler',
     'track.message': 'Message',
+    'track.video': 'Appel vidéo',
 
     // Account
     'account.title': 'Mon compte',
@@ -256,6 +257,7 @@ export const translations = {
     'track.driver': 'Your courier',
     'track.call': 'Call',
     'track.message': 'Message',
+    'track.video': 'Video call',
 
     'account.title': 'My account',
     'account.personal': 'Personal information',

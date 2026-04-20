@@ -12,6 +12,7 @@ from database import db, client
 from routes.auth import router as auth_router
 from routes.restaurants import router as restaurants_router
 from routes.orders import router as orders_router
+from routes.video import router as video_router
 from seed_data import run_seed
 
 app = FastAPI(title='CLIGOO API', version='1.0')
@@ -23,6 +24,7 @@ async def root():
 app.include_router(auth_router)
 app.include_router(restaurants_router)
 app.include_router(orders_router)
+app.include_router(video_router)
 
 app.add_middleware(
     CORSMiddleware,

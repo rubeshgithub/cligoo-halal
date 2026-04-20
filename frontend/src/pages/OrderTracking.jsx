@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Phone, MessageSquare, ShieldCheck, Bike, Store, Check, Home, Store as StoreIcon } from 'lucide-react';
+import { Phone, MessageSquare, ShieldCheck, Bike, Store, Check, Home, Store as StoreIcon, Video } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { orderApi } from '../lib/api';
+import VideoCallModal from '../components/VideoCallModal';
 
 const DRIVER = {
   name: 'Karim B.', rating: 4.9, vehicle_fr: 'Scooter', vehicle_en: 'Scooter',
@@ -17,6 +18,7 @@ const OrderTracking = () => {
   const [order, setOrder] = useState(null);
   const [driverPos, setDriverPos] = useState({ x: 20, y: 70 });
   const [error, setError] = useState('');
+  const [videoOpen, setVideoOpen] = useState(false);
 
   const stageIdx = useMemo(() => STAGES.indexOf(order?.status || 'confirmed'), [order]);
 
@@ -148,6 +150,9 @@ const OrderTracking = () => {
                 <MessageSquare className="w-4 h-4" /> {t('track.message')}
               </button>
             </div>
+            <button onClick={()=>setVideoOpen(true)} className="w-full mt-2 h-10 rounded-full bg-[#FF6A35] hover:bg-[#E85A28] text-white text-sm font-semibold inline-flex items-center justify-center gap-2">
+              <Video className="w-4 h-4" /> {t('track.video')}
+            </button>
             <div className="mt-4 flex items-start gap-2 text-[11px] text-[#6B6259] bg-[#E8F5E9] p-2 rounded-lg">
               <ShieldCheck className="w-3.5 h-3.5 text-[#2E7D32] mt-0.5" />
               <span>{lang==='fr' ? `Livreur assuré · ${DRIVER.insurance}` : `Insured courier · ${DRIVER.insurance}`}</span>
@@ -178,6 +183,8 @@ const OrderTracking = () => {
           </div>
         </aside>
       </div>
+
+      <VideoCallModal open={videoOpen} onOpenChange={setVideoOpen} orderId={order.id} />
     </main>
   );
 };
