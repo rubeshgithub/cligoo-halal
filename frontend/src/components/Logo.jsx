@@ -3,7 +3,7 @@ import React from 'react';
 const Logo = ({ size = 36, showText = true, className = '' }) => (
   <div className={`flex items-center gap-2 ${className}`}>
     <img
-      src="/cligoo-logo.jpeg"
+      src="/cligoo-logo.png"
       alt="CLIGOO"
       width={size}
       height={size}

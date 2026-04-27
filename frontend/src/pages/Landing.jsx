@@ -38,7 +38,7 @@ const Landing = () => {
     <main>
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10" style={{
-          background: 'linear-gradient(135deg, #FFF2E6 0%, #FADDC2 50%, #F8CFB0 100%)'
+          background: 'linear-gradient(135deg, #FFFCF8 0%, #FAF1E8 50%, #F5E1D0 100%)'
         }} />
         <div className="absolute -top-24 -right-24 w-[500px] h-[500px] rounded-full -z-10"
              style={{ background: 'radial-gradient(circle, rgba(255,106,53,0.18), transparent 70%)' }} />
