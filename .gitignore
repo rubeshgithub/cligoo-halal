@@ -46,6 +46,12 @@ dump.rdb
 .DS_Store
 *.pem
 
+# Environment / local config
+.env
+backend/.env
+frontend/.env
+*.local.txt
+
 # Python
 __pycache__/
 *pyc*

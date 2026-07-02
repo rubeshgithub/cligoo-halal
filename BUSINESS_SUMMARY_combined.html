@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CLIGOO — Business Summary</title>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+* { box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  color: #1F3B40; line-height: 1.55; font-size: 13px; margin: 0;
+}
+.cover {
+  text-align: center; padding: 90px 20px 60px;
+  page-break-after: always;
+}
+.cover .brand { font-size: 52px; font-weight: 800; letter-spacing: 2px; color: #3E8F8B; }
+.cover .tag { font-size: 16px; color: #6b7a7d; margin-top: 6px; letter-spacing: 4px; text-transform: uppercase; }
+.cover .title { font-size: 24px; font-weight: 700; margin-top: 50px; color: #1F3B40; }
+.cover .sub { font-size: 14px; color: #6b7a7d; margin-top: 10px; }
+.cover .rule { width: 70px; height: 4px; background: #3E8F8B; margin: 28px auto; border-radius: 2px; }
+.section { page-break-before: always; }
+.lang-band {
+  background: #3E8F8B; color: #fff; padding: 8px 14px; border-radius: 6px;
+  font-weight: 700; font-size: 13px; letter-spacing: 1px; margin-bottom: 18px;
+  display: inline-block;
+}
+h1 { font-size: 22px; color: #1F3B40; border-bottom: 3px solid #3E8F8B; padding-bottom: 8px; margin-top: 6px; }
+h2 { font-size: 16px; color: #3E8F8B; margin-top: 26px; border-left: 4px solid #3E8F8B; padding-left: 10px; }
+p, li { font-size: 13px; }
+em { color: #6b7a7d; }
+strong { color: #1F3B40; }
+ul, ol { padding-left: 22px; }
+li { margin: 4px 0; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 12px; }
+th { background: #1F3B40; color: #fff; text-align: left; padding: 8px 10px; }
+td { border: 1px solid #d8e0e0; padding: 7px 10px; vertical-align: top; }
+tr:nth-child(even) td { background: #f4f8f8; }
+blockquote {
+  background: #FFF2E6; border-left: 5px solid #F5C7A1; margin: 18px 0;
+  padding: 14px 18px; border-radius: 4px; font-size: 13.5px; color: #1F3B40;
+}
+code { background: #eef3f3; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+hr { border: none; border-top: 1px solid #e0e6e6; margin: 20px 0; }
+</style>
+</head>
+<body>
+  <div class="cover">
+    <div class="brand">CLIGOO</div>
+    <div class="tag">Click &amp; Goo</div>
+    <div class="rule"></div>
+    <div class="title">Business Summary &nbsp;/&nbsp; Résumé pour les décideurs</div>
+    <div class="sub">Halal food delivery platform &mdash; Livraison de repas halal</div>
+    <div class="sub" style="margin-top:40px; font-size:12px;">English &nbsp;&bull;&nbsp; Français</div>
+  </div>
+
+  <div class="section">
+    <span class="lang-band">EN &nbsp;ENGLISH</span>
+    <h1>CLIGOO — Business Summary</h1>
+<p><em>A plain-English overview for non-technical stakeholders.</em></p>
+<hr />
+<h2>What CLIGOO is</h2>
+<p>CLIGOO ("Click &amp; Goo") is a <strong>halal food delivery service for France</strong> — think UberEats or Deliveroo, but built specifically around <strong>halal-certified restaurants</strong>. Customers order food, restaurants prepare it, drivers deliver it, and the business takes a commission on every order.</p>
+<p>Two things make it stand out:
+- <strong>Halal trust</strong> — every restaurant prominently shows its halal certification (AVS, ARGML, Mosquée de Paris, etc.), a real selling point for the target audience.
+- <strong>Live video calls</strong> — a customer can video-call their delivery driver inside the app (e.g., "I'm on the 3rd floor, blue door"). Most big competitors don't offer this.</p>
+<p>The app works in <strong>both French and English</strong>.</p>
+<hr />
+<h2>Who can do what</h2>
+<p><strong>Customers (the public)</strong> — Browse restaurants, filter by cuisine / rating / delivery time, view menus, add items to a cart, place an order, pay, <strong>track the order live</strong> (preparing → on its way → delivered), <strong>video-call the driver</strong>, and see their order history.</p>
+<p><strong>Restaurants</strong> — A dashboard to go online/offline, see incoming orders, view daily sales, and accept/update orders. <em>(Currently shows sample data, not yet connected to real orders.)</em></p>
+<p><strong>Drivers</strong> — A dashboard to go online, see available delivery jobs, accept them, view earnings, and complete deliveries. <em>(Also sample data for now.)</em></p>
+<p><strong>Admins (the business)</strong> — A control panel showing total sales, number of orders, active restaurants and drivers, ratings, and approving new restaurants. <em>(Sample data for now.)</em></p>
+<hr />
+<h2>What has been built so far</h2>
+<p><strong>The customer experience is genuinely working, end to end.</strong> A customer can sign up, browse 8 sample restaurants, build an order, check out, and watch it being "delivered" with the driver video-call feature functioning. The behind-the-scenes engine that calculates the bill — food cost, service fee, delivery fee, tip, and how money splits between restaurant, driver, and platform — is built and tested.</p>
+<ul>
+<li>✅ Customer side: working and tested</li>
+<li>✅ Sign-up / login (including "Sign in with Google"): working</li>
+<li>✅ Video calls: working</li>
+<li>✅ The money-split logic: working and verified</li>
+<li>⚠️ Restaurant, driver, and admin dashboards: designed and look complete, but showing <strong>sample/demo data</strong> — not yet wired to real live orders</li>
+<li>❌ Real payments: not connected yet — it simulates the payment split but doesn't actually charge cards or pay out restaurants/drivers</li>
+</ul>
+<hr />
+<h2>What's pending (to become a real, launchable business)</h2>
+<ol>
+<li><strong>Real payment processing</strong> — the biggest gap. Today the app <em>calculates</em> who gets paid what, but no real money moves. Connecting a payment provider (Stripe) is the #1 priority.</li>
+<li><strong>Connect the dashboards to real data</strong> — make restaurant, driver, and admin screens show <em>actual</em> live orders instead of demo data.</li>
+<li><strong>Proper roles &amp; permissions</strong> — securely distinguish customers, drivers, and restaurant owners, each with only the access they should have.</li>
+<li><strong>Real restaurants &amp; real images</strong> — replace the 8 sample restaurants and stock photos with real onboarded restaurants, menus, and photos.</li>
+<li><strong>Security hardening</strong> — standard pre-launch tightening to safely handle real customer data and money.</li>
+<li><strong>Real delivery tracking</strong> — replace the mocked "driver on a map" with real GPS tracking.</li>
+</ol>
+<hr />
+<h2>The potential — how this could grow</h2>
+<ul>
+<li><strong>Self-service onboarding</strong> for restaurants and drivers (forms exist but don't submit yet), so you can scale without manual setup.</li>
+<li><strong>Notifications</strong> — "Your order is on its way," "New order received."</li>
+<li><strong>Ratings &amp; reviews</strong> — build trust between customers, restaurants, and drivers.</li>
+<li><strong>Promotions &amp; loyalty</strong> — discount codes, first-order offers, loyalty points (offers are displayed but not yet functional).</li>
+<li><strong>Multiple cities</strong> — currently Paris-focused; the structure supports expanding across France.</li>
+<li><strong>Business analytics</strong> — real charts on revenue, best-selling restaurants, peak hours.</li>
+<li><strong>Video calls as a marketing angle</strong> — a genuine differentiator worth promoting.</li>
+</ul>
+<hr />
+<h2>One-line takeaway</h2>
+<blockquote>
+<p><strong>CLIGOO is a working halal-food-delivery prototype where the customer journey is fully functional and tested. To turn it into a live business, the main work remaining is connecting real payments, hooking up the restaurant/driver/admin dashboards to live orders, and onboarding real restaurants.</strong></p>
+</blockquote>
+  </div>
+
+  <div class="section">
+    <span class="lang-band">FR &nbsp;FRAN&Ccedil;AIS</span>
+    <h1>CLIGOO — Résumé pour les décideurs</h1>
+<p><em>Une présentation en langage clair, destinée aux interlocuteurs non techniques.</em></p>
+<hr />
+<h2>Ce qu'est CLIGOO</h2>
+<p>CLIGOO (« Click &amp; Goo ») est un <strong>service de livraison de repas halal pour la France</strong> — pensez à UberEats ou Deliveroo, mais conçu spécifiquement autour des <strong>restaurants certifiés halal</strong>. Les clients commandent, les restaurants préparent, les livreurs livrent, et l'entreprise prélève une commission sur chaque commande.</p>
+<p>Deux éléments le distinguent :
+- <strong>La confiance halal</strong> — chaque restaurant affiche clairement sa certification halal (AVS, ARGML, Mosquée de Paris, etc.), un véritable argument de vente pour le public ciblé.
+- <strong>Les appels vidéo en direct</strong> — un client peut appeler son livreur en visio directement dans l'application (par ex. « Je suis au 3ᵉ étage, porte bleue »). La plupart des grands concurrents ne le proposent pas.</p>
+<p>L'application fonctionne <strong>en français et en anglais</strong>.</p>
+<hr />
+<h2>Qui peut faire quoi</h2>
+<p><strong>Les clients (le grand public)</strong> — Parcourir les restaurants, filtrer par cuisine / note / temps de livraison, consulter les menus, ajouter des articles au panier, passer commande, payer, <strong>suivre la commande en direct</strong> (en préparation → en route → livrée), <strong>appeler le livreur en visio</strong>, et consulter leur historique de commandes.</p>
+<p><strong>Les restaurants</strong> — Un tableau de bord pour se mettre en ligne/hors ligne, voir les commandes entrantes, consulter le chiffre d'affaires du jour, et accepter/mettre à jour les commandes. <em>(Affiche actuellement des données de démonstration, pas encore connecté aux commandes réelles.)</em></p>
+<p><strong>Les livreurs</strong> — Un tableau de bord pour se mettre en ligne, voir les courses disponibles, les accepter, consulter les gains, et finaliser les livraisons. <em>(Également des données de démonstration pour l'instant.)</em></p>
+<p><strong>Les administrateurs (l'entreprise)</strong> — Un panneau de contrôle affichant le chiffre d'affaires total, le nombre de commandes, les restaurants et livreurs actifs, les notes, et la validation des nouveaux restaurants. <em>(Données de démonstration pour l'instant.)</em></p>
+<hr />
+<h2>Ce qui a été réalisé jusqu'à présent</h2>
+<p><strong>L'expérience client fonctionne réellement, de bout en bout.</strong> Un client peut s'inscrire, parcourir 8 restaurants de démonstration, composer une commande, payer, et suivre sa « livraison » avec la fonction d'appel vidéo opérationnelle. Le moteur en coulisses qui calcule l'addition — coût des plats, frais de service, frais de livraison, pourboire, et la répartition de l'argent entre le restaurant, le livreur et la plateforme — est développé et testé.</p>
+<ul>
+<li>✅ Côté client : fonctionnel et testé</li>
+<li>✅ Inscription / connexion (y compris « Se connecter avec Google ») : fonctionnel</li>
+<li>✅ Appels vidéo : fonctionnels</li>
+<li>✅ La logique de répartition de l'argent : fonctionnelle et vérifiée</li>
+<li>⚠️ Tableaux de bord restaurant, livreur et administrateur : conçus et d'apparence complète, mais affichent des <strong>données de démonstration</strong> — pas encore reliés aux commandes réelles</li>
+<li>❌ Paiements réels : pas encore connectés — l'application simule la répartition des paiements mais ne débite pas réellement les cartes et ne rémunère pas réellement les restaurants/livreurs</li>
+</ul>
+<hr />
+<h2>Ce qui reste à faire (pour devenir une véritable entreprise lançable)</h2>
+<ol>
+<li><strong>Le traitement réel des paiements</strong> — la principale lacune. Aujourd'hui, l'application <em>calcule</em> qui doit être payé et combien, mais aucun argent réel ne circule. Connecter un prestataire de paiement (Stripe) est la priorité nº 1.</li>
+<li><strong>Relier les tableaux de bord aux données réelles</strong> — faire en sorte que les écrans restaurant, livreur et administrateur affichent les <em>vraies</em> commandes en direct au lieu de données de démonstration.</li>
+<li><strong>Des rôles et autorisations appropriés</strong> — distinguer de façon sécurisée les clients, les livreurs et les restaurateurs, chacun n'ayant accès qu'à ce qui le concerne.</li>
+<li><strong>De vrais restaurants et de vraies images</strong> — remplacer les 8 restaurants de démonstration et les photos génériques par de vrais restaurants intégrés, avec leurs menus et leurs photos.</li>
+<li><strong>Renforcement de la sécurité</strong> — les ajustements standards d'avant-lancement pour gérer en toute sécurité les données clients et l'argent réels.</li>
+<li><strong>Un suivi de livraison réel</strong> — remplacer la carte « livreur sur le plan » simulée par un suivi GPS réel.</li>
+</ol>
+<hr />
+<h2>Le potentiel — comment faire évoluer l'application</h2>
+<ul>
+<li><strong>Inscription en autonomie</strong> pour les restaurants et les livreurs (les formulaires existent mais ne s'envoient pas encore), afin de croître sans configuration manuelle.</li>
+<li><strong>Notifications</strong> — « Votre commande est en route », « Nouvelle commande reçue ».</li>
+<li><strong>Notes et avis</strong> — instaurer la confiance entre clients, restaurants et livreurs.</li>
+<li><strong>Promotions et fidélité</strong> — codes de réduction, offres de première commande, points de fidélité (les offres sont affichées mais pas encore fonctionnelles).</li>
+<li><strong>Plusieurs villes</strong> — actuellement centré sur Paris ; la structure permet l'expansion dans toute la France.</li>
+<li><strong>Analyses commerciales</strong> — de vrais graphiques sur le chiffre d'affaires, les restaurants les plus performants, les heures de pointe.</li>
+<li><strong>Les appels vidéo comme argument marketing</strong> — un véritable facteur de différenciation qui mérite d'être mis en avant.</li>
+</ul>
+<hr />
+<h2>À retenir en une phrase</h2>
+<blockquote>
+<p><strong>CLIGOO est un prototype fonctionnel de livraison de repas halal dont le parcours client est entièrement opérationnel et testé. Pour en faire une entreprise active, il reste principalement à connecter les paiements réels, à relier les tableaux de bord restaurant/livreur/administrateur aux commandes en direct, et à intégrer de vrais restaurants.</strong></p>
+</blockquote>
+  </div>
+</body>
+</html>
