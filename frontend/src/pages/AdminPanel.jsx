@@ -10,12 +10,12 @@ const AdminPanel = () => {
   const approve = (id) => setPending(p => p.filter(x => x.id !== id));
 
   const metrics = [
-    { icon: Euro,        label: lang==='fr'?'GMV jour':'GMV today',             value: `${ADMIN_METRICS.gmv_today.toFixed(2)} €`, accent: '#2E7D32' },
-    { icon: ListOrdered, label: lang==='fr'?'Commandes':'Orders',                value: ADMIN_METRICS.orders_today,              accent: '#3E8F8B' },
-    { icon: Store,       label: lang==='fr'?'Restaurants':'Restaurants',         value: ADMIN_METRICS.active_restaurants,        accent: '#1976D2' },
-    { icon: Bike,        label: lang==='fr'?'Livreurs':'Couriers',               value: ADMIN_METRICS.active_drivers,            accent: '#F5C7A1' },
-    { icon: Star,        label: lang==='fr'?'Note moy.':'Avg rating',            value: ADMIN_METRICS.avg_rating,                accent: '#8B5A2B' },
-    { icon: Percent,     label: lang==='fr'?'Commission':'Commission',           value: `${ADMIN_METRICS.commission_today.toFixed(2)} €`, accent: '#2E7D32' },
+    { icon: Euro,        label: lang==='fr'?'GMV jour':'GMV today',             value: `${ADMIN_METRICS.gmv_today.toFixed(2)} €`, accent: '#0B6E4F' },
+    { icon: ListOrdered, label: lang==='fr'?'Commandes':'Orders',                value: ADMIN_METRICS.orders_today,              accent: '#146F7C' },
+    { icon: Store,       label: lang==='fr'?'Restaurants':'Restaurants',         value: ADMIN_METRICS.active_restaurants,        accent: '#C0392B' },
+    { icon: Bike,        label: lang==='fr'?'Livreurs':'Couriers',               value: ADMIN_METRICS.active_drivers,            accent: '#A86F00' },
+    { icon: Star,        label: lang==='fr'?'Note moy.':'Avg rating',            value: ADMIN_METRICS.avg_rating,                accent: '#7A4B00' },
+    { icon: Percent,     label: lang==='fr'?'Commission':'Commission',           value: `${ADMIN_METRICS.commission_today.toFixed(2)} €`, accent: '#0B6E4F' },
   ];
 
   const tabs = [
@@ -28,15 +28,15 @@ const AdminPanel = () => {
 
   return (
     <main className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-      <div className="flex items-center gap-2 text-sm text-[#5A6F72] mb-1"><ShieldCheck className="w-4 h-4" /> {t('dash.admin')}</div>
-      <h1 className="font-display text-3xl md:text-4xl font-extrabold text-[#1F3B40] mb-6">CLIGOO Admin</h1>
+      <div className="flex items-center gap-2 text-sm text-ink-soft mb-1"><ShieldCheck className="w-4 h-4" /> {t('dash.admin')}</div>
+      <h1 className="font-display text-3xl md:text-4xl font-bold text-ink mb-6">CLIGOO Admin</h1>
 
       <div className="grid lg:grid-cols-[220px_1fr] gap-6">
-        <aside className="bg-white rounded-2xl border border-[#E8E0D0] p-3 h-fit sticky top-20">
+        <aside className="bg-white rounded-2xl border border-clay p-3 h-fit sticky top-20">
           <nav className="space-y-1">
             {tabs.map(tb => (
               <button key={tb.id} onClick={()=>setTab(tb.id)}
-                className={`w-full text-left inline-flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium ${tab===tb.id ? 'bg-[#3E8F8B] text-white' : 'text-[#1F3B40] hover:bg-[#FFF2E6]'}`}>
+                className={`w-full text-left inline-flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium ${tab===tb.id ? 'bg-emerald-700 text-white' : 'text-ink hover:bg-saffron-50'}`}>
                 <tb.icon className="w-4 h-4" /> {tb.label}
               </button>
             ))}
@@ -48,61 +48,61 @@ const AdminPanel = () => {
             <div className="space-y-6">
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {metrics.map((m,i)=>(
-                  <div key={i} className="bg-white rounded-2xl border border-[#E8E0D0] p-4">
+                  <div key={i} className="bg-white rounded-2xl border border-clay p-4">
                     <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-2" style={{ background: `${m.accent}20`, color: m.accent }}>
                       <m.icon className="w-5 h-5" />
                     </div>
-                    <p className="text-xs text-[#5A6F72]">{m.label}</p>
-                    <p className="font-display text-xl font-bold text-[#1F3B40]">{m.value}</p>
+                    <p className="text-xs text-ink-soft">{m.label}</p>
+                    <p className="font-display text-xl font-bold text-ink">{m.value}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="bg-white rounded-2xl border border-[#E8E0D0] p-5">
+              <div className="bg-white rounded-2xl border border-clay p-5">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-display font-bold">{lang==='fr'?'Volume commandes · 7 derniers jours':'Orders volume · last 7 days'}</h3>
-                  <TrendingUp className="w-5 h-5 text-[#2E7D32]" />
+                  <TrendingUp className="w-5 h-5 text-emerald-700" />
                 </div>
                 <div className="h-48 flex items-end gap-3">
                   {[38, 52, 44, 63, 71, 58, 82].map((h,i)=>(
                     <div key={i} className="flex-1 h-full flex flex-col justify-end items-center gap-2">
-                      <div className="w-full rounded-t-lg bg-gradient-to-t from-[#3E8F8B] to-[#F5C7A1] min-h-4" style={{ height: `${h}%` }} />
-                      <span className="text-[10px] text-[#5A6F72]">{['L','M','M','J','V','S','D'][i]}</span>
+                      <div className="w-full rounded-t-lg bg-emerald-700 min-h-4" style={{ height: `${h}%` }} />
+                      <span className="text-[10px] text-ink-soft">{['L','M','M','J','V','S','D'][i]}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl border border-[#E8E0D0] p-5">
+              <div className="bg-white rounded-2xl border border-clay p-5">
                 <h3 className="font-display font-bold mb-3">{lang==='fr'?'Restaurants en attente de validation':'Pending restaurants'}</h3>
-                <div className="divide-y divide-[#E8E0D0]">
+                <div className="divide-y divide-clay">
                   {pending.map(p => (
                     <div key={p.id} className="py-3 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-[#FFF2E6] flex items-center justify-center"><Store className="w-5 h-5 text-[#3E8F8B]" /></div>
+                      <div className="w-10 h-10 rounded-lg bg-saffron-50 flex items-center justify-center"><Store className="w-5 h-5 text-emerald-700" /></div>
                       <div className="flex-1">
                         <p className="font-semibold text-sm">{p.name}</p>
-                        <p className="text-xs text-[#5A6F72]">{p.owner} · {p.city} · {lang==='fr'?'Cert.':'Cert.'} {p.cert}</p>
+                        <p className="text-xs text-ink-soft">{p.owner} · {p.city} · {lang==='fr'?'Cert.':'Cert.'} {p.cert}</p>
                       </div>
-                      <button onClick={()=>approve(p.id)} className="h-9 px-3 rounded-full bg-[#2E7D32] text-white text-xs font-semibold inline-flex items-center gap-1"><Check className="w-4 h-4" /> {lang==='fr'?'Approuver':'Approve'}</button>
-                      <button onClick={()=>approve(p.id)} className="h-9 px-3 rounded-full bg-[#FFF2E6] text-[#1F3B40] text-xs font-semibold inline-flex items-center gap-1"><X className="w-4 h-4" /> {lang==='fr'?'Rejeter':'Reject'}</button>
+                      <button onClick={()=>approve(p.id)} className="h-9 px-3 rounded-full bg-emerald-700 text-white text-xs font-semibold inline-flex items-center gap-1"><Check className="w-4 h-4" /> {lang==='fr'?'Approuver':'Approve'}</button>
+                      <button onClick={()=>approve(p.id)} className="h-9 px-3 rounded-full bg-saffron-50 text-ink text-xs font-semibold inline-flex items-center gap-1"><X className="w-4 h-4" /> {lang==='fr'?'Rejeter':'Reject'}</button>
                     </div>
                   ))}
-                  {pending.length === 0 && <p className="text-sm text-[#5A6F72] py-3">{lang==='fr'?'Aucune demande en attente.':'No pending requests.'}</p>}
+                  {pending.length === 0 && <p className="text-sm text-ink-soft py-3">{lang==='fr'?'Aucune demande en attente.':'No pending requests.'}</p>}
                 </div>
               </div>
             </div>
           )}
 
           {tab === 'restaurants' && (
-            <div className="bg-white rounded-2xl border border-[#E8E0D0] overflow-hidden">
-              <div className="px-5 py-4 border-b border-[#E8E0D0] flex items-center gap-3">
-                <div className="flex-1 bg-[#FFF2E6] rounded-full h-10 px-4 flex items-center gap-2">
-                  <Search className="w-4 h-4 text-[#5A6F72]" />
+            <div className="bg-white rounded-2xl border border-clay overflow-hidden">
+              <div className="px-5 py-4 border-b border-clay flex items-center gap-3">
+                <div className="flex-1 bg-saffron-50 rounded-full h-10 px-4 flex items-center gap-2">
+                  <Search className="w-4 h-4 text-ink-soft" />
                   <input placeholder={lang==='fr'?'Rechercher...':'Search...'} className="flex-1 bg-transparent outline-none text-sm" />
                 </div>
               </div>
               <table className="w-full text-sm">
-                <thead className="bg-[#FFF8F1] text-[#5A6F72]">
+                <thead className="bg-sand text-ink-soft">
                   <tr>
                     <th className="text-left p-3 font-semibold">{lang==='fr'?'Nom':'Name'}</th>
                     <th className="text-left p-3 font-semibold">Cert.</th>
@@ -112,7 +112,7 @@ const AdminPanel = () => {
                     <th></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E8E0D0]">
+                <tbody className="divide-y divide-clay">
                   {RESTAURANTS.map(r => (
                     <tr key={r.id}>
                       <td className="p-3">
@@ -121,11 +121,11 @@ const AdminPanel = () => {
                           <span className="font-semibold">{r.name}</span>
                         </div>
                       </td>
-                      <td className="p-3"><span className="px-2 py-1 rounded-full bg-[#E8F5E9] text-[#2E7D32] text-[11px] font-semibold">{r.certification}</span></td>
+                      <td className="p-3"><span className="px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold">{r.certification}</span></td>
                       <td className="p-3">{r.rating}</td>
                       <td className="p-3">30%</td>
-                      <td className="p-3"><span className="text-[#2E7D32] font-semibold">{t('common.online')}</span></td>
-                      <td className="p-3 text-right"><MoreHorizontal className="w-4 h-4 text-[#5A6F72] ml-auto" /></td>
+                      <td className="p-3"><span className="text-emerald-700 font-semibold">{t('common.online')}</span></td>
+                      <td className="p-3 text-right"><MoreHorizontal className="w-4 h-4 text-ink-soft ml-auto" /></td>
                     </tr>
                   ))}
                 </tbody>
@@ -134,18 +134,18 @@ const AdminPanel = () => {
           )}
 
           {tab === 'drivers' && (
-            <div className="bg-white rounded-2xl border border-[#E8E0D0] p-5">
+            <div className="bg-white rounded-2xl border border-clay p-5">
               <h3 className="font-display font-bold mb-3">{lang==='fr'?'Livreurs actifs':'Active couriers'}</h3>
-              <p className="text-sm text-[#5A6F72]">{ADMIN_METRICS.active_drivers} {lang==='fr'?'livreurs en ligne':'online couriers'}. {lang==='fr'?'Tous couverts par assurance MAIF Pro.':'All covered by MAIF Pro insurance.'}</p>
+              <p className="text-sm text-ink-soft">{ADMIN_METRICS.active_drivers} {lang==='fr'?'livreurs en ligne':'online couriers'}. {lang==='fr'?'Tous couverts par assurance MAIF Pro.':'All covered by MAIF Pro insurance.'}</p>
               <div className="mt-4 grid sm:grid-cols-2 gap-3">
                 {['Karim B.','Sarah L.','Mohamed A.','Ines K.'].map((n,i)=>(
-                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-[#FFF2E6]">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#3E8F8B] to-[#F5C7A1] text-white flex items-center justify-center font-bold">{n[0]}</div>
+                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-saffron-50">
+                    <div className="w-10 h-10 rounded-full bg-saffron-400 text-ink flex items-center justify-center font-bold">{n[0]}</div>
                     <div className="flex-1">
                       <p className="font-semibold text-sm">{n}</p>
-                      <p className="text-xs text-[#5A6F72]">4.{8-i} ★ · {120-i*15} {lang==='fr'?'courses':'deliveries'}</p>
+                      <p className="text-xs text-ink-soft">4.{8-i} ★ · {120-i*15} {lang==='fr'?'courses':'deliveries'}</p>
                     </div>
-                    <span className="text-xs font-semibold text-[#2E7D32]">{t('common.online')}</span>
+                    <span className="text-xs font-semibold text-emerald-700">{t('common.online')}</span>
                   </div>
                 ))}
               </div>
@@ -153,15 +153,15 @@ const AdminPanel = () => {
           )}
 
           {tab === 'customers' && (
-            <div className="bg-white rounded-2xl border border-[#E8E0D0] p-8 text-center">
-              <Users className="w-10 h-10 mx-auto text-[#3E8F8B] mb-3" />
+            <div className="bg-white rounded-2xl border border-clay p-8 text-center">
+              <Users className="w-10 h-10 mx-auto text-emerald-700 mb-3" />
               <h3 className="font-display font-bold">2 184 {lang==='fr'?'clients actifs':'active customers'}</h3>
-              <p className="text-sm text-[#5A6F72] mt-1">{lang==='fr'?'Gestion complète disponible dans la V2.':'Full management in V2.'}</p>
+              <p className="text-sm text-ink-soft mt-1">{lang==='fr'?'Gestion complète disponible dans la V2.':'Full management in V2.'}</p>
             </div>
           )}
 
           {tab === 'settings' && (
-            <div className="bg-white rounded-2xl border border-[#E8E0D0] p-6 space-y-4">
+            <div className="bg-white rounded-2xl border border-clay p-6 space-y-4">
               <h3 className="font-display font-bold">{lang==='fr'?'Commissions plateforme':'Platform commissions'}</h3>
               {[
                 { k: lang==='fr'?'Commission restaurant':'Restaurant commission', v: '30%' },
@@ -169,8 +169,8 @@ const AdminPanel = () => {
                 { k: lang==='fr'?'Frais livreur base':'Base courier fee',            v: '2,50 €' },
                 { k: lang==='fr'?'Par km livreur':'Per km courier',                    v: '1,10 €' },
               ].map((r,i)=>(
-                <div key={i} className="flex items-center justify-between py-2 border-b border-[#E8E0D0] last:border-0">
-                  <span className="text-sm text-[#1F3B40]">{r.k}</span>
+                <div key={i} className="flex items-center justify-between py-2 border-b border-clay last:border-0">
+                  <span className="text-sm text-ink">{r.k}</span>
                   <span className="text-sm font-semibold">{r.v}</span>
                 </div>
               ))}

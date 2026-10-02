@@ -41,71 +41,71 @@ const LoginPage = () => {
   return (
     <main className="max-w-md mx-auto px-4 py-12">
       <div className="text-center mb-6">
-        <Logo size={36} className="justify-center" />
+        <Logo size={52} className="items-center" />
       </div>
-      <div className="bg-white rounded-2xl border border-[#E8E0D0] p-7">
-        <h1 className="font-display text-2xl font-extrabold text-[#1F3B40]">
+      <div className="bg-white rounded-2xl border border-clay p-7">
+        <h1 className="font-display text-2xl font-bold text-ink">
           {isLogin ? (lang==='fr' ? 'Bon retour chez CLIGOO' : 'Welcome back to CLIGOO')
                    : (lang==='fr' ? 'Créez votre compte' : 'Create your account')}
         </h1>
-        <p className="text-sm text-[#5A6F72] mt-1 mb-6">
+        <p className="text-sm text-ink-soft mt-1 mb-6">
           {isLogin ? (lang==='fr' ? 'Connectez-vous pour commander' : 'Sign in to place an order')
                    : (lang==='fr' ? 'Rejoignez la communauté Halal' : 'Join the Halal community')}
         </p>
 
         <button onClick={googleSignIn}
-          className="w-full h-12 rounded-xl bg-white border border-[#E8E0D0] hover:border-[#1F3B40] text-[#1F3B40] font-semibold inline-flex items-center justify-center gap-3 mb-4">
+          className="w-full h-12 rounded-xl bg-white border border-clay hover:border-ink text-ink font-semibold inline-flex items-center justify-center gap-3 mb-4">
           <GoogleIcon />
           {lang==='fr' ? 'Continuer avec Google' : 'Continue with Google'}
         </button>
         {googleError && <p className="text-xs text-red-500 mb-3">{lang==='fr' ? 'La connexion Google a échoué. Réessayez.' : 'Google sign-in failed. Please retry.'}</p>}
 
         <div className="flex items-center gap-3 my-5">
-          <div className="flex-1 h-px bg-[#E8E0D0]" />
-          <span className="text-xs text-[#A8BCBE]">{lang==='fr' ? 'OU' : 'OR'}</span>
-          <div className="flex-1 h-px bg-[#E8E0D0]" />
+          <div className="flex-1 h-px bg-clay" />
+          <span className="text-xs text-ink-mist">{lang==='fr' ? 'OU' : 'OR'}</span>
+          <div className="flex-1 h-px bg-clay" />
         </div>
 
         <form onSubmit={submit} className="space-y-3">
           {!isLogin && (
-            <div className="flex items-center gap-2 h-12 px-4 rounded-xl border border-[#E8E0D0] focus-within:border-[#3E8F8B] bg-white">
-              <User className="w-4 h-4 text-[#A8BCBE]" />
+            <div className="flex items-center gap-2 h-12 px-4 rounded-xl border border-clay focus-within:border-emerald-700 bg-white">
+              <User className="w-4 h-4 text-ink-mist" />
               <input value={name} onChange={e=>setName(e.target.value)}
                 placeholder={lang==='fr' ? 'Prénom' : 'First name'}
                 className="flex-1 outline-none text-sm" />
             </div>
           )}
-          <div className="flex items-center gap-2 h-12 px-4 rounded-xl border border-[#E8E0D0] focus-within:border-[#3E8F8B] bg-white">
-            <Mail className="w-4 h-4 text-[#A8BCBE]" />
+          <div className="flex items-center gap-2 h-12 px-4 rounded-xl border border-clay focus-within:border-emerald-700 bg-white">
+            <Mail className="w-4 h-4 text-ink-mist" />
             <input type="email" required value={email} onChange={e=>setEmail(e.target.value)}
               placeholder="vous@exemple.com" className="flex-1 outline-none text-sm" />
           </div>
-          <div className="flex items-center gap-2 h-12 px-4 rounded-xl border border-[#E8E0D0] focus-within:border-[#3E8F8B] bg-white">
-            <Lock className="w-4 h-4 text-[#A8BCBE]" />
+          <div className="flex items-center gap-2 h-12 px-4 rounded-xl border border-clay focus-within:border-emerald-700 bg-white">
+            <Lock className="w-4 h-4 text-ink-mist" />
             <input type="password" required minLength={6} value={password} onChange={e=>setPassword(e.target.value)}
               placeholder={lang==='fr' ? 'Mot de passe (6+ car.)' : 'Password (6+ chars)'}
               className="flex-1 outline-none text-sm" />
           </div>
           {err && <p className="text-xs text-red-500">{err}</p>}
           <button type="submit" disabled={busy}
-            className="w-full h-12 rounded-xl bg-[#3E8F8B] hover:bg-[#2F7A78] disabled:opacity-60 text-white font-semibold inline-flex items-center justify-center gap-2">
+            className="w-full h-12 rounded-xl bg-saffron-400 hover:bg-saffron-300 disabled:opacity-60 text-ink font-semibold inline-flex items-center justify-center gap-2">
             {busy ? '…' : (isLogin ? (lang==='fr' ? 'Se connecter' : 'Log in')
                                     : (lang==='fr' ? 'Créer le compte' : 'Create account'))}
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
-        <div className="flex items-center justify-between mt-5 text-xs text-[#5A6F72]">
-          <span className="inline-flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-[#2E7D32]" /> {lang==='fr' ? 'Chiffré & sécurisé' : 'Encrypted & secure'}</span>
-          <button type="button" onClick={()=>{ setMode(isLogin?'signup':'login'); setErr(''); }} className="text-[#3E8F8B] font-semibold hover:underline">
+        <div className="flex items-center justify-between mt-5 text-xs text-ink-soft">
+          <span className="inline-flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-emerald-700" /> {lang==='fr' ? 'Chiffré & sécurisé' : 'Encrypted & secure'}</span>
+          <button type="button" onClick={()=>{ setMode(isLogin?'signup':'login'); setErr(''); }} className="text-emerald-700 font-semibold hover:underline">
             {isLogin ? (lang==='fr' ? 'Créer un compte' : 'Create an account')
                      : (lang==='fr' ? 'J\'ai déjà un compte' : 'I have an account')}
           </button>
         </div>
       </div>
 
-      <p className="text-center text-xs text-[#5A6F72] mt-6">
-        <Link to="/" className="hover:text-[#3E8F8B]">{lang==='fr' ? 'Retour à l\'accueil' : 'Back to home'}</Link>
+      <p className="text-center text-xs text-ink-soft mt-6">
+        <Link to="/" className="hover:text-emerald-700">{lang==='fr' ? 'Retour à l\'accueil' : 'Back to home'}</Link>
       </p>
     </main>
   );

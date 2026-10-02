@@ -22,10 +22,10 @@ const CartDrawer = () => {
 
         {cart.items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
-            <div className="w-16 h-16 rounded-full bg-[#FFF2E6] flex items-center justify-center mb-4">
-              <ShoppingBag className="w-7 h-7 text-[#3E8F8B]" />
+            <div className="w-16 h-16 rounded-full bg-saffron-50 flex items-center justify-center mb-4">
+              <ShoppingBag className="w-7 h-7 text-emerald-700" />
             </div>
-            <p className="text-sm text-[#5A6F72]">{t('cart.empty')}</p>
+            <p className="text-sm text-ink-soft">{t('cart.empty')}</p>
           </div>
         ) : (
           <>
@@ -34,15 +34,15 @@ const CartDrawer = () => {
                 <div key={item.id} className="flex gap-3 items-center">
                   {item.image && <img src={item.image} alt="" className="w-14 h-14 rounded-lg object-cover" />}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[#1F3B40] truncate">{item.name}</p>
-                    <p className="text-xs text-[#5A6F72]">{item.price.toFixed(2)} €</p>
+                    <p className="text-sm font-semibold text-ink truncate">{item.name}</p>
+                    <p className="text-xs text-ink-soft">{item.price.toFixed(2)} €</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-[#FFF2E6] rounded-full px-1 py-1">
-                    <button onClick={()=>updateQty(item.id, -1)} className="w-7 h-7 rounded-full bg-white hover:bg-[#FDE4CC] flex items-center justify-center">
-                      {item.qty === 1 ? <Trash2 className="w-3.5 h-3.5 text-[#5A6F72]" /> : <Minus className="w-3.5 h-3.5" />}
+                  <div className="flex items-center gap-2 bg-saffron-50 rounded-full px-1 py-1">
+                    <button onClick={()=>updateQty(item.id, -1)} className="w-7 h-7 rounded-full bg-white hover:bg-saffron-100 flex items-center justify-center">
+                      {item.qty === 1 ? <Trash2 className="w-3.5 h-3.5 text-ink-soft" /> : <Minus className="w-3.5 h-3.5" />}
                     </button>
                     <span className="text-sm font-semibold w-4 text-center">{item.qty}</span>
-                    <button onClick={()=>updateQty(item.id, +1)} className="w-7 h-7 rounded-full bg-[#3E8F8B] text-white hover:bg-[#2F7A78] flex items-center justify-center">
+                    <button onClick={()=>updateQty(item.id, +1)} className="w-7 h-7 rounded-full bg-emerald-700 text-white hover:bg-emerald-800 flex items-center justify-center">
                       <Plus className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -50,19 +50,19 @@ const CartDrawer = () => {
               ))}
             </div>
 
-            <div className="border-t border-[#E8E0D0] pt-4 space-y-1.5 text-sm">
-              <div className="flex justify-between text-[#5A6F72]"><span>{t('cart.subtotal')}</span><span>{cartSubtotal.toFixed(2)} €</span></div>
-              <div className="flex justify-between text-[#5A6F72]"><span>{t('cart.delivery')}</span><span>{deliveryFee.toFixed(2)} €</span></div>
-              <div className="flex justify-between text-[#5A6F72]"><span>{t('cart.service')}</span><span>{serviceFee.toFixed(2)} €</span></div>
-              <div className="flex justify-between pt-2 border-t border-[#E8E0D0] text-base font-bold text-[#1F3B40]"><span>{t('cart.total')}</span><span>{total.toFixed(2)} €</span></div>
+            <div className="border-t border-clay pt-4 space-y-1.5 text-sm">
+              <div className="flex justify-between text-ink-soft"><span>{t('cart.subtotal')}</span><span>{cartSubtotal.toFixed(2)} €</span></div>
+              <div className="flex justify-between text-ink-soft"><span>{t('cart.delivery')}</span><span>{deliveryFee.toFixed(2)} €</span></div>
+              <div className="flex justify-between text-ink-soft"><span>{t('cart.service')}</span><span>{serviceFee.toFixed(2)} €</span></div>
+              <div className="flex justify-between pt-2 border-t border-clay text-base font-bold text-ink"><span>{t('cart.total')}</span><span>{total.toFixed(2)} €</span></div>
 
               <button
                 onClick={() => { setCartOpen(false); nav('/checkout'); }}
-                className="w-full mt-4 h-12 rounded-full bg-[#3E8F8B] hover:bg-[#2F7A78] text-white font-semibold"
+                className="w-full mt-4 h-12 rounded-full bg-saffron-400 hover:bg-saffron-300 text-ink font-semibold"
               >
                 {t('cart.checkout')} · {total.toFixed(2)} €
               </button>
-              <button onClick={clearCart} className="w-full text-xs text-[#5A6F72] hover:text-[#3E8F8B] pt-2">
+              <button onClick={clearCart} className="w-full text-xs text-ink-soft hover:text-emerald-700 pt-2">
                 {t('filter.clear')}
               </button>
             </div>

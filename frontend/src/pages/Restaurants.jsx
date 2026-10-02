@@ -57,24 +57,24 @@ const Restaurants = () => {
   return (
     <main className="max-w-7xl mx-auto px-4 md:px-6 py-8">
       <div className="mb-6">
-        <div className="flex flex-wrap items-center gap-2 text-sm text-[#5A6F72]">
-          <MapPin className="w-4 h-4 text-[#3E8F8B]" />
+        <div className="flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+          <MapPin className="w-4 h-4 text-emerald-700" />
           <span>{address || 'Paris, France'}</span>
         </div>
-        <h1 className="font-display text-3xl md:text-4xl font-extrabold text-[#1F3B40] mt-2">
+        <h1 className="font-display text-3xl md:text-4xl font-bold text-ink mt-2">
           {t('restos.title')}
         </h1>
-        <p className="text-[#5A6F72] mt-1">{filtered.length} {t('restos.results')}</p>
+        <p className="text-ink-soft mt-1">{filtered.length} {t('restos.results')}</p>
       </div>
 
       <div className="flex gap-2 overflow-x-auto no-scrollbar pb-3 mb-4">
         <button onClick={()=>setCat('all')}
-          className={`shrink-0 px-4 h-10 rounded-full text-sm font-semibold border ${cat==='all' ? 'bg-[#1F3B40] text-white border-[#1F3B40]' : 'bg-white text-[#1F3B40] border-[#E8E0D0] hover:border-[#3E8F8B]'}`}>
+          className={`shrink-0 px-4 h-10 rounded-full text-sm font-semibold border ${cat==='all' ? 'bg-ink text-white border-ink' : 'bg-white text-ink border-clay hover:border-emerald-700'}`}>
           {lang==='fr' ? 'Tout' : 'All'}
         </button>
         {cats.map(c => (
           <button key={c.id} onClick={()=>setCat(c.id)}
-            className={`shrink-0 inline-flex items-center gap-2 pl-1 pr-4 h-10 rounded-full text-sm font-semibold border ${cat===c.id ? 'bg-[#1F3B40] text-white border-[#1F3B40]' : 'bg-white text-[#1F3B40] border-[#E8E0D0] hover:border-[#3E8F8B]'}`}>
+            className={`shrink-0 inline-flex items-center gap-2 pl-1 pr-4 h-10 rounded-full text-sm font-semibold border ${cat===c.id ? 'bg-ink text-white border-ink' : 'bg-white text-ink border-clay hover:border-emerald-700'}`}>
             <img src={c.image} alt="" className="w-8 h-8 rounded-full object-cover" />
             {lang==='fr' ? c.name_fr : c.name_en}
           </button>
@@ -82,12 +82,12 @@ const Restaurants = () => {
       </div>
 
       <div className="grid lg:grid-cols-[260px_1fr] gap-6">
-        <aside className="bg-white rounded-2xl border border-[#E8E0D0] p-5 h-fit sticky top-20">
+        <aside className="bg-white rounded-2xl border border-clay p-5 h-fit sticky top-20">
           <div className="flex items-center justify-between mb-4">
-            <div className="inline-flex items-center gap-2 font-display font-bold text-[#1F3B40]">
+            <div className="inline-flex items-center gap-2 font-display font-bold text-ink">
               <SlidersHorizontal className="w-4 h-4" /> {t('filter.sort')}
             </div>
-            <button onClick={clearAll} className="text-xs text-[#3E8F8B] hover:underline">{t('filter.clear')}</button>
+            <button onClick={clearAll} className="text-xs text-emerald-700 hover:underline">{t('filter.clear')}</button>
           </div>
 
           <div className="space-y-2 mb-5">
@@ -98,7 +98,7 @@ const Restaurants = () => {
               ['priceAsc',    t('sort.priceAsc')],
             ].map(([k,label]) => (
               <label key={k} className="flex items-center gap-3 cursor-pointer text-sm">
-                <input type="radio" name="sort" checked={sort===k} onChange={()=>setSort(k)} className="accent-[#3E8F8B]" />
+                <input type="radio" name="sort" checked={sort===k} onChange={()=>setSort(k)} className="accent-emerald-700" />
                 <span>{label}</span>
               </label>
             ))}
@@ -108,8 +108,8 @@ const Restaurants = () => {
             <p className="font-semibold text-sm mb-2">{t('filter.delivery')}</p>
             <input type="range" min="15" max="60" step="5" value={maxDelivery}
               onChange={(e)=>setMaxDelivery(+e.target.value)}
-              className="w-full accent-[#3E8F8B]" />
-            <div className="text-xs text-[#5A6F72] mt-1">≤ {maxDelivery} {t('common.minutes')}</div>
+              className="w-full accent-emerald-700" />
+            <div className="text-xs text-ink-soft mt-1">≤ {maxDelivery} {t('common.minutes')}</div>
           </div>
 
           <div className="mb-5">
@@ -117,7 +117,7 @@ const Restaurants = () => {
             <div className="flex gap-2">
               {[1,2,3].map(p => (
                 <button key={p} onClick={()=>togglePrice(p)}
-                  className={`h-9 px-3 rounded-full text-sm font-semibold border ${priceLevels.includes(p) ? 'bg-[#3E8F8B] text-white border-[#3E8F8B]' : 'bg-white border-[#E8E0D0] hover:border-[#3E8F8B]'}`}>
+                  className={`h-9 px-3 rounded-full text-sm font-semibold border ${priceLevels.includes(p) ? 'bg-emerald-700 text-white border-emerald-700' : 'bg-white border-clay hover:border-emerald-700'}`}>
                   {'€'.repeat(p)}
                 </button>
               ))}
@@ -129,7 +129,7 @@ const Restaurants = () => {
             <div className="flex gap-2">
               {[0, 4.0, 4.5, 4.8].map(rt => (
                 <button key={rt} onClick={()=>setMinRating(rt)}
-                  className={`h-9 px-3 rounded-full text-sm font-semibold border ${minRating===rt ? 'bg-[#3E8F8B] text-white border-[#3E8F8B]' : 'bg-white border-[#E8E0D0] hover:border-[#3E8F8B]'}`}>
+                  className={`h-9 px-3 rounded-full text-sm font-semibold border ${minRating===rt ? 'bg-emerald-700 text-white border-emerald-700' : 'bg-white border-clay hover:border-emerald-700'}`}>
                   {rt === 0 ? (lang==='fr' ? 'Tout' : 'Any') : `${rt}+`}
                 </button>
               ))}
@@ -138,13 +138,13 @@ const Restaurants = () => {
         </aside>
 
         <section>
-          <div className="bg-white rounded-full border border-[#E8E0D0] focus-within:border-[#3E8F8B] h-12 px-4 flex items-center gap-2 mb-5">
-            <Search className="w-4 h-4 text-[#5A6F72]" />
+          <div className="bg-white rounded-full border border-clay focus-within:border-emerald-700 h-12 px-4 flex items-center gap-2 mb-5">
+            <Search className="w-4 h-4 text-ink-soft" />
             <input value={search} onChange={e=>setSearch(e.target.value)}
               placeholder={lang==='fr' ? 'Rechercher un restaurant...' : 'Search restaurants...'}
               className="flex-1 outline-none text-sm" />
             {search && (
-              <button onClick={()=>setSearch('')} className="text-[#5A6F72] hover:text-[#3E8F8B]"><X className="w-4 h-4" /></button>
+              <button onClick={()=>setSearch('')} className="text-ink-soft hover:text-emerald-700"><X className="w-4 h-4" /></button>
             )}
           </div>
 
@@ -155,8 +155,8 @@ const Restaurants = () => {
               ))}
             </div>
           ) : filtered.length === 0 ? (
-            <div className="bg-white rounded-2xl p-10 text-center border border-[#E8E0D0]">
-              <p className="text-[#5A6F72]">{lang==='fr' ? 'Aucun restaurant ne correspond à vos filtres.' : 'No restaurant matches your filters.'}</p>
+            <div className="bg-white rounded-2xl p-10 text-center border border-clay">
+              <p className="text-ink-soft">{lang==='fr' ? 'Aucun restaurant ne correspond à vos filtres.' : 'No restaurant matches your filters.'}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
