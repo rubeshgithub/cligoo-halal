@@ -7,12 +7,24 @@ module.exports = {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+			display: ['"El Messiri"', 'Georgia', 'serif'],
+			sans: ['"Readex Pro"', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+			/* Zellige & Saffron palette */
+			emerald: { 50: '#E3F4EC', 100: '#C6E9D9', 300: '#7FD6AE', 500: '#13A06F', 700: '#0B6E4F', 800: '#095A41', 900: '#06402E' },
+			saffron: { 50: '#FFF1D6', 100: '#FFE6B0', 200: '#FCD68A', 300: '#FFC24D', 400: '#F2A71B', 700: '#A86F00', 900: '#7A4B00' },
+			pome: { 50: '#FCE6E3', 400: '#E35D4F', 600: '#C0392B', 800: '#9E2A1F' },
+			iznik: { 50: '#E2F3F5', 500: '#1C8C9C', 700: '#146F7C', 900: '#0E525C' },
+			ink: { DEFAULT: '#14213D', 700: '#22345A', 900: '#0B1326', soft: '#4A5468', mute: '#7C8598', mist: '#B8C0D0' },
+			sand: { DEFAULT: '#FFF8EE', 200: '#F3E6D2' },
+			clay: '#EADBC4',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
